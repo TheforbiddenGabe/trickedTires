@@ -1,0 +1,44 @@
+'''
+Create a program for the auto shop that can be used for direct drive vehicles 
+that will calculate the accuracy increase or decrease of the speedometer and 
+odometer when the customer wants to change their tire diameter. For example, if 
+standard tires are 14” and a customer wants to change it to 18”, what will be 
+the impact to their speedometer and odometer? Bonus: Include the wear in your 
+program for the customer whose tires are worn.
+'''
+
+#-------------------------------------------------------------------------------
+
+#user inputs are here
+old_tire_width = float(input("Factory tire width (in millimeters): "))
+old_aspect_ratio = float(input("Factory aspect ratio: "))
+old_rim_diameter = float(input("Factory wheel diameter (in inches): "))
+
+new_tire_width = float(input("New tire width (in millimeters): "))
+new_aspect_ratio = float(input("New aspect ratio: "))
+new_rim_diameter = float(input("New wheel diameter (in inches): "))
+
+#converts mm to inches
+old_width_inch = old_tire_width / 25.4
+new_width_inch = new_tire_width / 25.4
+
+#Finds the full diameter of the old and the new tire
+old_full_diameter = (((old_aspect_ratio / 100) * old_width_inch)*2) + old_rim_diameter
+new_full_diameter = (((new_aspect_ratio / 100) * new_width_inch)*2) + new_rim_diameter
+ratio = new_full_diameter/old_full_diameter
+#This looks for the percent inaccuracy between the two tires
+percent = ((new_full_diameter/old_full_diameter)*100) - 100
+if percent > 0:
+    print(str(round(percent, 1)) + "% inaccurate.")
+elif percent < 0:
+    print(str(round(-1 *(percent), 1)) + "% inaccurate.")
+elif percent == 0:
+    print("It's a 1:1 ratio")
+
+#Outputs the reading of the speedometer, after the tire change
+speed = float(input("What speed would you like to check?: "))
+print("when the speedometer reads " + str(speed) + "mph, the car is actually traveling " + str(round((ratio)*speed, 1)) + "mph.")
+
+#Outputs the reading of the odometer, after the tire change
+distance = float(input("Enter a number of miles: "))
+print("When the odometer reads " + str(distance) + " mile, you actually traveled " + str(round((ratio)*distance, 1)) + " miles.")
