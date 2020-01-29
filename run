@@ -1,17 +1,43 @@
-import wx 
-  
-#import the newly created GUI file 
-import demo  
-class CalcFrame(demo.MyFrame1): 
-   def __init__(self,parent): 
-      demo.MyFrame1.__init__(self,parent)  
-		
-   def FindSquare(self,event): 
-      num = int(self.m_textCtrl1.GetValue()) 
-      self.m_textCtrl2.SetValue (str(num*num)) 
-        
-app = wx.App(False) 
-frame = CalcFrame(None) 
-frame.Show(True) 
-#start the applications 
-app.MainLoop() 
+import wx
+
+# import the newly created GUI file
+import main
+
+
+class CalcFrame(main.MyFrame1):
+    def __init__(self, parent):
+        main.MyFrame1.__init__(self, parent)
+
+    def runAccuracy(self, event):
+        old_tire_width = float(self.m_oWidthBox.GetValue())
+        old_aspect_ratio = float(self.m_oRatioBox.GetValue())
+        old_rim_diameter = float(self.m_oDiameterBox.GetValue())
+
+        new_tire_width = float(self.m_nWidthBox.GetValue())
+        new_aspect_ratio = float(self.m_nRatioBox.GetValue())
+        new_rim_diameter = float(self.m_nDiameterBox.GetValue())
+
+        old_width_inch = old_tire_width / 25.4
+        new_width_inch = new_tire_width / 25.4
+
+        # Finds the full diameter of the old and the new tire
+        old_full_diameter = (((old_aspect_ratio / 100) * old_width_inch) * 2) + old_rim_diameter
+        new_full_diameter = (((new_aspect_ratio / 100) * new_width_inch) * 2) + new_rim_diameter
+        ratio = new_full_diameter / old_full_diameter
+        # This looks for the percent inaccuracy between the two tires
+        percent = ((new_full_diameter / old_full_diameter) * 100) - 100
+
+        self.m_finalOutputBox.SetValue(str(round(percent, 1)) + "%")
+
+        speedIn = round(float(self.m_inSpeed.GetValue()) * ratio, 1)
+        distIn = round(float(self.m_inDist.GetValue()) * ratio, 1)
+
+        self.m_outSpeed.SetValue(str(speedIn) + " MPH")
+        self.m_outDist.SetValue(str(distIn) + " Miles")
+
+
+app = wx.App(False)
+frame = CalcFrame(None)
+frame.Show(True)
+# start the application
+app.MainLoop()
